@@ -15,7 +15,7 @@ A Django-based web application for creating beautiful image collages with multip
 
 1. **Clone Repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/amansahu47388/Collage-Editor-platform.git
    cd collage_editor
    ```
 
@@ -26,9 +26,9 @@ A Django-based web application for creating beautiful image collages with multip
    source env/bin/activate  # macOS/Linux
    ```
 
-3. **Install Dependencies**
+3. **Run requirement file**
    ```bash
-   pip install django pillow
+   pip install -r requirements.txt
    ```
 
 4. **Run Migrations**
@@ -73,27 +73,6 @@ collage_editor/
 - **Download**: Click "Download Collage" button
 - **Delete**: Click "Delete" with confirmation
 
-## 🛠️ Technical Details
-
-### Models
-- `Collage`: Stores collage metadata and grid style
-- `ImageItem`: Stores individual images for each collage
-
-### Views
-- `upload_collage()`: Handle collage creation
-- `collage_display()`: Display individual collages
-- `collage_list()`: List all collages
-- `delete_collage()`: Delete collages
-
-### URL Patterns
-```python
-urlpatterns = [
-    path('', views.collage_list, name='collage_list'),
-    path('upload/', views.upload_collage, name='upload_collage'),
-    path('collage/<int:collage_id>/', views.collage_display, name='collage_display'),
-    path('collage/<int:collage_id>/delete/', views.delete_collage, name='delete_collage'),
-]
-```
 
 
 **Made with ❤️ for creative people everywhere** 

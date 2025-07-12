@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Create a Collage</h2>
+<form id="collageForm" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.title.label_tag }} {{ form.title }}<br><br>
+    {{ form.images.label_tag }} {{ form.images }}<br><br>
+    <div id="preview"></div>
+    <button type="submit">Upload</button>
+</form>
+<script>
+const input = document.querySelector('input[type="file"]');
+const preview = document.getElementById('preview');
+input.addEventListener('change', function() {
+    preview.innerHTML = '';
+    Array.from(this.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.width = '100px';
+            img.style.margin = '5px';
+            preview.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+{% endblock %}

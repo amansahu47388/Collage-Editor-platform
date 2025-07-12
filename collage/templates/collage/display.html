@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Collage: {{ collage.title }}</h2>
+<div id="collage-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+    {% for image in images %}
+        <img src="{{ image.image.url }}" style="width: 100%; height: auto; border-radius: 8px;" />
+    {% endfor %}
+</div>
+<br>
+<button id="downloadBtn">Download Collage</button>
+<script>
+// Download collage as image
+const btn = document.getElementById('downloadBtn');
+btn.onclick = function() {
+    html2canvas(document.getElementById('collage-grid')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'collage.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+</script>
+<!-- Add html2canvas from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+{% endblock %}
