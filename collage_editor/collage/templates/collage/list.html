@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10">
+    <h2 class="text-2xl font-bold mb-4">Saved Collages</h2>
+    <a href="{% url 'upload_collage' %}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Create New Collage</a>
+    <div class="grid grid-cols-1 gap-4">
+        {% for collage in collages %}
+        <div class="p-4 bg-white rounded shadow flex justify-between items-center">
+            <div>
+                <div class="font-semibold">{{ collage.title }}</div>
+                <div class="text-gray-500 text-sm">{{ collage.created_at }}</div>
+                <div class="text-gray-500 text-sm">Grid Style: {{ collage.get_grid_style_display }}</div>
+            </div>
+            <div class="flex space-x-2">
+                <a href="{% url 'collage_display' collage.id %}" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition-colors">View</a>
+                <button onclick="confirmDelete({{ collage.id }}, '{{ collage.title }}')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">Delete</button>
+            </div>
+        </div>
+        {% empty %}
+        <div>No collages found.</div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-xl max-w-md mx-4">
+        <h3 class="text-lg font-semibold mb-4">Confirm Delete</h3>
+        <p class="text-gray-600 mb-6">Are you sure you want to delete "<span id="collageTitle"></span>"? This action cannot be undone.</p>
+        <div class="flex justify-end space-x-3">
+            <button onclick="hideDeleteModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors">Cancel</button>
+            <form id="deleteForm" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(collageId, collageTitle) {
+    document.getElementById('collageTitle').textContent = collageTitle;
+    document.getElementById('deleteForm').action = `/collage/${collageId}/delete/`;
+    document.getElementById('deleteModal').classList.remove('hidden');
+    document.getElementById('deleteModal').classList.add('flex');
+}
+
+function hideDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    document.getElementById('deleteModal').classList.remove('flex');
+}
+
+// Close modal when clicking outside
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        hideDeleteModal();
+    }
+});
+</script>
+{% endblock %}
